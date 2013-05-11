@@ -208,6 +208,9 @@ MWindowPropertyCache::MWindowPropertyCache(Window w,
     collect_timer->setInterval(5000);
     collect_timer->setSingleShot(true);
 
+    // Make sure XSelectInput went through before the async xcb requests
+    XSync(QX11Info::display(), False);
+
     if (!geom)
         addRequest(realGeometryKey, SLOT(realGeometry()),
                    xcb_get_geometry(xcb_conn, window).sequence);
